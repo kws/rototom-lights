@@ -1,0 +1,15 @@
+.*
+__pycache__
+*.pyc 
+
+pyproject.toml
+settings.toml
+poetry.lock
+README.md
+
+/tests
+/tests/*
+/build
+/build/*
+
+
