@@ -1,0 +1,15 @@
+{
+    "python.languageServer": "Pylance",
+    "python.analysis.diagnosticSeverityOverrides": {
+        "reportMissingModuleSource": "none",
+        "reportShadowedImports": "none"
+    },
+    "python.analysis.extraPaths": [
+        "/Users/kws/.vscode/extensions/joedevivo.vscode-circuitpython-0.2.0-darwin-x64/boards/0x239A/0x8120",
+        "/Users/kws/.vscode/extensions/joedevivo.vscode-circuitpython-0.2.0-darwin-x64/stubs",
+        "/Users/kws/Library/Application Support/Code/User/globalStorage/joedevivo.vscode-circuitpython/bundle/20240820/adafruit-circuitpython-bundle-py-20240820/lib"
+    ],
+    "circuitpython.board.version": "9.1.1",
+    "circuitpython.board.vid": "0x239A",
+    "circuitpython.board.pid": "0x8120"
+}
