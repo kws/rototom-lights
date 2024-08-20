@@ -47,21 +47,26 @@ class Meteor:
 
         self.velocity = 10 * random.choice([1, -1])
         self.lifespan = 0.5 + random.random()
+        self.length = random.randint(5, 10)
+
         self.age = 0
         self.range = []
 
-    def reset(self):
-        for i in self.range:
-            self.pixels[i] = 0
-
-    def update(self):
+    def capture(self):
         self.age = time.monotonic() - self.start_time
         self.pos = int(self.pos + (self.velocity * self.age))
-
         self.range = [self.pos + i for i in range(10)]
         self.range = [i for i in self.range if start_pixel < i < len(self.pixels)]
- 
+
+        self.memory = [self.pixels[p] for p in self.range]        
+
+
+    def reset(self):
         for ix, i in enumerate(self.range):
+            self.pixels[i] = self.memory[ix]
+
+    def update(self):
+         for ix, i in enumerate(self.range):
             ix = (ix + 1) * (1 if self.velocity < 0 else -1)
             brightness = 255 - (25 * ix)
             self.pixels[i] = (brightness, brightness, brightness)
@@ -87,6 +92,10 @@ class Meteors:
     def update(self):
         if random.random() > 0.99:
             self.meteors.append(Meteor(self.pixels))
+
+        for m in self.meteors:
+            m.capture()
+
         for m in self.meteors:
             m.update()
 
