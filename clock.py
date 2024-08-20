@@ -65,33 +65,7 @@ def do_clock(pixels, pixels_per_segment):
         pixels[pixels_per_segment*3] = WHITE
         pixels[pixels_per_segment*4] = WHITE
 
-
-class CombinedPixels:
-
-    def __init__(self, *pixels):
-        assert len(pixels) > 0
-        self._pixels = pixels
-
-    def __len__(self):
-        return len(self._pixels[0])
-    
-    def fill(self, *args, **kwargs):
-        for p in self._pixels:
-            p.fill(*args, **kwargs)
-
-    def show(self):
-        for p in self._pixels:
-            p.show()
-
-    def __getitem__(self, key):
-        return self._pixels[key]
-
-    def __setitem__(self, key, value):
-        for p in self._pixels:
-            p[key] = value
-
-def run(pixels1, pixels2):
-    pixels = CombinedPixels(pixels1, pixels2)
+def run(pixels):
     numpixels = len(pixels)
     pixels_per_segment = numpixels // 4
 
@@ -102,6 +76,4 @@ def run(pixels1, pixels2):
             pixels.fill(PURPLE if time.monotonic() % 2 < 1 else 0)
             set_time()
         pixels.show()
-
-    numpixels = len(pixels)
 

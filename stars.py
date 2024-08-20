@@ -37,10 +37,70 @@ def get_color():
 dim_factor = int(os.getenv('DIM_FACTOR', "3"))
 rand_factor = float(os.getenv('RAND_FACTOR', "0.35"))
 
+class Meteor:
+
+    def __init__(self, pixels):
+        self.pixels = pixels
+        self.start_time = time.monotonic()
+
+        self.pos = random.randint(start_pixel, len(self.pixels))
+
+        self.velocity = 10 * random.choice([1, -1])
+        self.lifespan = 0.5 + random.random()
+        self.age = 0
+        self.range = []
+
+    def reset(self):
+        for i in self.range:
+            self.pixels[i] = 0
+
+    def update(self):
+        self.age = time.monotonic() - self.start_time
+        self.pos = int(self.pos + (self.velocity * self.age))
+
+        self.range = [self.pos + i for i in range(10)]
+        self.range = [i for i in self.range if start_pixel < i < len(self.pixels)]
+ 
+        for ix, i in enumerate(self.range):
+            ix = (ix + 1) * (1 if self.velocity < 0 else -1)
+            brightness = 255 - (25 * ix)
+            self.pixels[i] = (brightness, brightness, brightness)
+
+    @property
+    def complete(self):
+        return self.age > self.lifespan
+
+
+class Meteors:
+
+    def __init__(self, pixels):
+        self.pixels = pixels
+        self.meteors = []
+        self.data = None
+
+    def reset(self):
+        for m in self.meteors:
+            m.reset()
+
+        self.meteors = [m for m in self.meteors if not m.complete]
+
+    def update(self):
+        if random.random() > 0.99:
+            self.meteors.append(Meteor(self.pixels))
+        for m in self.meteors:
+            m.update()
+
+
+
+
 def run(pixels):
     numpixels = len(pixels)
+    meteors = Meteors(pixels)
 
     while True:
+
+        meteors.reset()
+        
         for p in range(start_pixel, numpixels):
             pix = pixels[p]
             if sum(pix) > 0:
@@ -50,6 +110,8 @@ def run(pixels):
         if random.random() < rand_factor:
             p = random.randint(start_pixel, numpixels-1)
             pixels[p] = get_color()
+
+        meteors.update()
 
         pixels[0] = (0,0,0) if time.monotonic() % 2 < 1 else my_color
 
